@@ -51,3 +51,22 @@ python3 test.py test-data/test3.png
 結局はSSDなどの深層学習モデルを使うことになりそう。  
 それかGoogle Cloud Vision API（クレカ情報登録の必要あり）
 
+## SSD使用編
+
+OCRがイマイチなので、SSDも試してみる。  
+SSDで行けるとなれば、改めて別リポジトリでも作る予定。  
+その時にDocker環境改めて構築する（現状は↑のDocker環境ではＳＳＤは動かない）。
+see:
+- [参考repojitory](https://github.com/miyamotok0105/pytorch_handbook/tree/master/chapter7)
+- [参考サイト](http://cedro3.com/ai/pytorch-ssd/)
+- [参考2](http://cedro3.com/ai/pytorch-ssd-bccd/)
+
+### とりあえずSSDを動かす
+現状では、ネットに転がっている学習済みweightsを利用する都合上、
+ナンバープレートではなく動物やら人やらを検知する仕様になってしまっている。  
+後に、ナンバープレートの数字検知に作り替える予定。  
+**手順**
+
+- image_dirに検知したいpng画像を入れる
+- python3 ssd_model.py
+- detect_imgに結果が吐き出される
