@@ -15,7 +15,7 @@ From ubuntu:18.04
 
 LABEL maintainer="Admin yusukekimura1219@gmail.com"
 
-RUN apt update && apt install python3-pip -y  && pip3 install pytesseract && pip3 install pillow && apt install tesseract-ocr -y
+RUN apt update && apt install python3-pip -y  && pip3 install pytesseract && pip3 install pillow && apt install tesseract-ocr -y && pip3 install torch==1.4.0+cpu torchvision==0.5.0+cpu -f https://download.pytorch.org/whl/torch_stable.html && pip3 install opencv-python && apt install libsm6 -y && pip3 install matplotlib
 ```
 
 ### このリポジトリをクローン
@@ -25,7 +25,7 @@ git clone このリポジトリ
 
 ### DockerImageをひっぱてくる＆コンテナ起動
 
-以下を順に実行  
+以下を順に実行(数分はかかる)  
 
 ```
 docker build .
@@ -70,3 +70,7 @@ see:
 - image_dirに検知したいpng画像を入れる
 - python3 ssd_model.py
 - detect_imgに結果が吐き出される
+
+注)[Errno 2] No such file or directory: '../weights/ssd300_mAP_77.43_v2.pth'  
+などのエラーが出たらweightsディレクトリ内のメモに従い、DL&ファイル設置する。  
+注)VOCdevkitというフォルダを作り、[BCCDリポジトリ](https://github.com/Shenggan/BCCD_Dataset)のBCCDフォルダをその中に設置するとtrain.pyなどが動作することを確認。

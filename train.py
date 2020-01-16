@@ -1,3 +1,4 @@
+from data import *
 from utils.augmentations import SSDAugmentation
 from layers.modules import MultiBoxLoss
 from ssd import build_ssd
@@ -20,7 +21,7 @@ args = {'dataset':'BCCD',  # VOC → BCCD
         'resume':'',
         'start_iter':0,
         'num_workers':0,  # 4 → 0
-        'cuda':True,  # Macの場合False
+        'cuda':False,  # Macの場合False
         'lr':5e-4,
         'momentum':0.9,
         'weight_decay':5e-4,
@@ -155,7 +156,8 @@ for iteration in range(args['start_iter'], cfg['max_iter']):
     conf_loss += loss_c.item()
 
     #ログの出力
-    if iteration % 10 == 0:
+    # if iteration % 10 == 0:
+    if iteration % 5 == 0: #修正ポイント
         print('timer: %.4f sec.' % (t1 - t0))
         print('iter ' + repr(iteration) + ' || Loss: %.4f ||' % (loss.item()), end=' ')
 

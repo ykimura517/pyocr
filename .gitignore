@@ -3,3 +3,4 @@ image_dir/
 test-data/
 detect_img/
 __pycache__/
+VOCdevkit/

@@ -23,12 +23,15 @@ if sys.version_info[0] == 2:
 else:
     import xml.etree.ElementTree as ET
 
+"""
 VOC_CLASSES = (  # always index 0
     'aeroplane', 'bicycle', 'bird', 'boat',
     'bottle', 'bus', 'car', 'cat', 'chair',
     'cow', 'diningtable', 'dog', 'horse',
     'motorbike', 'person', 'pottedplant',
     'sheep', 'sofa', 'train', 'tvmonitor')
+"""
+VOC_CLASSES = ('rbc','wbc','platelets')#修正ポイント
 
 # handbook
 # note: if you used our download scripts, this should be right
@@ -112,7 +115,9 @@ class VOCDetection(data.Dataset):
 
     def __init__(self, root,
                 # handbook
-                image_sets=[('2007', 'trainval'), ('2012', 'trainval')],
+                # image_sets=[('2007', 'trainval'), ('2012', 'trainval')],
+                image_sets=[('BCCD', 'trainval')], #修正ポイント
+
                 #image_sets=[('2007', 'trainval')],
                 # handbook
                 transform=None, target_transform=VOCAnnotationTransform(),
@@ -125,8 +130,10 @@ class VOCDetection(data.Dataset):
         self._annopath = osp.join('%s', 'Annotations', '%s.xml')
         self._imgpath = osp.join('%s', 'JPEGImages', '%s.jpg')
         self.ids = list()
-        for (year, name) in image_sets:
-            rootpath = osp.join(self.root, 'VOC' + year)
+        # for (year, name) in image_sets:
+        #     rootpath = osp.join(self.root, 'VOC' + year)
+        for (dir, name) in image_sets: #修正ポイント
+            rootpath = osp.join(self.root, dir) #修正ポイント
             for line in open(osp.join(rootpath, 'ImageSets', 'Main', name + '.txt')):
                 self.ids.append((rootpath, line.strip()))
 
