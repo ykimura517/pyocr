@@ -31,7 +31,8 @@ VOC_CLASSES = (  # always index 0
     'motorbike', 'person', 'pottedplant',
     'sheep', 'sofa', 'train', 'tvmonitor')
 """
-VOC_CLASSES = ('rbc','wbc','platelets')#修正ポイント
+# VOC_CLASSES = ('rbc','wbc','platelets')#修正ポイント
+VOC_CLASSES = ('0','1','2','3','4','5','6','7','8','9')#修正ポイント
 
 # handbook
 # note: if you used our download scripts, this should be right

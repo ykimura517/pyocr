@@ -10,6 +10,9 @@ if torch.cuda.is_available():
     torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
 from ssd import build_ssd
+import sys
+
+target_img=sys.argv[1]
 
 # SSDネットワークの定義と重みファイルのロード
 net = build_ssd('test', 300, 21)
@@ -20,14 +23,17 @@ from data import VOCDetection, VOC_ROOT, VOCAnnotationTransform
 
 # BCCD_test 読み込み
 testset = VOCDetection(VOC_ROOT, [('BCCD', 'test')], None, VOCAnnotationTransform())
-img_id = 24
-image = testset.pull_image(img_id)
+img_id = 1
+# image = testset.pull_image(img_id)
+image=cv2.imread(target_img, cv2.IMREAD_COLOR)
+# print(image.shape)
 
 # テスト画像の表示
 rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 plt.figure(figsize=(10,10))
 plt.imshow(rgb_image)
-plt.show()
+# plt.show()
+# plt.savefig("testimg.png")
 
 x = cv2.resize(image, (300, 300)).astype(np.float32)  # 300*300にリサイズ
 x -= (104.0, 117.0, 123.0)
@@ -45,9 +51,11 @@ from data import VOC_CLASSES as labels
 plt.figure(figsize=(10,10))
 colors = plt.cm.hsv(np.linspace(0, 1, 21)).tolist()
 plt.imshow(rgb_image)
+# plt.savefig("rgb_image.png")
 currentAxis = plt.gca()
 # 推論結果をdetectionsに格納
 detections = y.data
+
 # scale each detection back up to the image
 scale = torch.Tensor(rgb_image.shape[1::-1]).repeat(2)
 
@@ -60,6 +68,7 @@ for i in range(detections.size(1)):
     while detections[0,i,j,0] >= 0.6:
         score = detections[0,i,j,0]
         label_name = labels[i-1]
+        # print(label_name)
         display_txt = '%s: %.2f'%(label_name, score)
         pt = (detections[0,i,j,1:]*scale).cpu().numpy()
         coords = (pt[0], pt[1]), pt[2]-pt[0]+1, pt[3]-pt[1]+1
@@ -68,4 +77,6 @@ for i in range(detections.size(1)):
         currentAxis.text(pt[0], pt[1], display_txt, bbox={'facecolor':color, 'alpha':0.5})
         j+=1
 plt.show()
-plt.close()
+# plt.close()
+
+plt.savefig("result.png")

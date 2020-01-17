@@ -35,8 +35,50 @@ docker tag イメージのID num-plate-ocr
 
 docker run -it -v $PWD"/pyocr":/pyocr  --name workspace-ocr num-plate-ocr
 ```
+ちなみに2回目以降は
+```
+docker start -i workspace-ocr
+```
+だけで良い。
 
-### とりあえず動かしてみる
+
+コンテナに入ったら、
+```
+cd pyocr
+```
+## SSD使用編
+
+とりあえず、SSDによる物体検出を試してみる。  
+SSDで行けるとなれば、改めて別リポジトリでも作る予定。  
+~~その時にDocker環境改めて構築する（現状は↑のDocker環境ではＳＳＤは動かない）。~~  
+↑動くようになりました。  
+
+see:
+- [参考repojitory](https://github.com/miyamotok0105/pytorch_handbook/tree/master/chapter7)
+- [参考サイト](http://cedro3.com/ai/pytorch-ssd/)
+- [参考2](http://cedro3.com/ai/pytorch-ssd-bccd/)
+
+### とりあえずSSDを動かす
+現状では、ネットに転がっている学習済みweightsを利用する都合上、
+ナンバープレートではなく動物やら人やらを検知する仕様になってしまっている。  
+後に、ナンバープレートの数字検知に作り替える予定。  
+**手順**
+```
+python3 interface.py path/to/image
+```
+**これでresult.pngという名前で検出結果が吐き出される**  
+
+
+注)[Errno 2] No such file or directory: '../weights/ssd300_mAP_77.43_v2.pth'  
+などのエラーが出たらweightsディレクトリ内のメモに従い、DL&ファイル設置する。  
+~~注)VOCdevkitというフォルダを作り、[BCCDリポジトリ](https://github.com/Shenggan/BCCD_Dataset)のBCCDフォルダをその中に設置するとtrain.pyなどが動作することを確認。~~  
+注）weightsフォルダに学習済みweightを入れないと動きません。入手していない人はykimura517に言ってください。渡します。
+
+
+
+#### 過去の試行錯誤
+
+##### とりあえずocrのコードを動かしてみる
 
 コンテナに入ったら、
 ```
@@ -50,27 +92,3 @@ python3 test.py test-data/test3.png
 ので、引き続きサーベイ。  
 結局はSSDなどの深層学習モデルを使うことになりそう。  
 それかGoogle Cloud Vision API（クレカ情報登録の必要あり）
-
-## SSD使用編
-
-OCRがイマイチなので、SSDも試してみる。  
-SSDで行けるとなれば、改めて別リポジトリでも作る予定。  
-その時にDocker環境改めて構築する（現状は↑のDocker環境ではＳＳＤは動かない）。
-see:
-- [参考repojitory](https://github.com/miyamotok0105/pytorch_handbook/tree/master/chapter7)
-- [参考サイト](http://cedro3.com/ai/pytorch-ssd/)
-- [参考2](http://cedro3.com/ai/pytorch-ssd-bccd/)
-
-### とりあえずSSDを動かす
-現状では、ネットに転がっている学習済みweightsを利用する都合上、
-ナンバープレートではなく動物やら人やらを検知する仕様になってしまっている。  
-後に、ナンバープレートの数字検知に作り替える予定。  
-**手順**
-
-- image_dirに検知したいpng画像を入れる
-- python3 ssd_model.py
-- detect_imgに結果が吐き出される
-
-注)[Errno 2] No such file or directory: '../weights/ssd300_mAP_77.43_v2.pth'  
-などのエラーが出たらweightsディレクトリ内のメモに従い、DL&ファイル設置する。  
-注)VOCdevkitというフォルダを作り、[BCCDリポジトリ](https://github.com/Shenggan/BCCD_Dataset)のBCCDフォルダをその中に設置するとtrain.pyなどが動作することを確認。
