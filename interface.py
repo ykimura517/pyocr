@@ -65,10 +65,11 @@ for i in range(detections.size(1)):
     # 確信度confが0.6以上のボックスを表示
     # jは確信度上位200件のボックスのインデックス
     # detections[0,i,j]は[conf,xmin,ymin,xmax,ymax]の形状
-    while detections[0,i,j,0] >= 0.6:
+    while detections[0,i,j,0] >= 0.4:
         score = detections[0,i,j,0]
         label_name = labels[i-1]
-        # print(label_name)
+        print(label_name)
+        #print(111)
         display_txt = '%s: %.2f'%(label_name, score)
         pt = (detections[0,i,j,1:]*scale).cpu().numpy()
         coords = (pt[0], pt[1]), pt[2]-pt[0]+1, pt[3]-pt[1]+1

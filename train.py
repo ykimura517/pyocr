@@ -117,6 +117,13 @@ data_loader = data.DataLoader(dataset, args['batch_size'],
                               shuffle=True, collate_fn=detection_collate,
                               pin_memory=True)
 
+#vgg 部分はパラメーター更新しない
+for param in net.vgg.parameters():
+    param.requires_grad=False
+
+# for param in net.parameters():
+#     print(param.requires_grad)
+
 # 学習の開始
 batch_iterator = None
 # iterationでループして、cfg['max_iter']まで学習する
