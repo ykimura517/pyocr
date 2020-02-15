@@ -65,7 +65,7 @@ for i in range(detections.size(1)):
     # 確信度confが0.6以上のボックスを表示
     # jは確信度上位200件のボックスのインデックス
     # detections[0,i,j]は[conf,xmin,ymin,xmax,ymax]の形状
-    while detections[0,i,j,0] >= 0.4:
+    while detections[0,i,j,0] >= 0.34:
         score = detections[0,i,j,0]
         label_name = labels[i-1]
         print(label_name)
