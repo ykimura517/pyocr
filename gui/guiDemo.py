@@ -3,6 +3,10 @@
 import tkinter as tk
 from sasikae import sasikae
 from PIL import ImageTk
+from guiSupport import guiSuppoter,DBManager
+
+detecter = guiSuppoter()
+DBManager=DBManager()
 
 
 def draw_img(event):
@@ -11,13 +15,25 @@ def draw_img(event):
     event.widget.itemconfig("imageDisplay",image=img,anchor=tk.NW)
 
 def changeImg(panel):
-    img=ImageTk.PhotoImage(file="po.png")
+    img=ImageTk.PhotoImage(file="result.png")
     panel.configure(image=img)
     panel.image=img
 
-def pushed(b):
- b["text"] = "押されたよ"
- a=sasikae()
+def mainProcess(panel,target_img="po.png"):
+    num1,num2=detecter.imgDetect(target_img)
+    changeImg(panel)
+    if DBManager.isInDb(num1,num2):
+        print("OK")
+    else:
+        print("NG")
+
+    return num1,num2
+
+
+#
+# def pushed(b):
+#  b["text"] = "押されたよ"
+#  a=sasikae()
 
 #rootウィンドウを作成
 root = tk.Tk()
@@ -34,7 +50,7 @@ label.grid()
 
 
 img = tk.PhotoImage(file="son.png")
-panel = tk.Label(root,image=img)
+panel = tk.Label(root,image=img,width = 280, height = 260)
 
 panel.img=img
 # panel.pack(side="top",fill="both",expand="yes")
@@ -42,7 +58,8 @@ panel.grid()
 
 #ボタンを作る
 # button = tk.Button(root, text="ボタン", command= lambda : pushed(button))
-button = tk.Button(root, text="ボタン", command=lambda:changeImg(panel))
+# button = tk.Button(root, text="ボタン", command=lambda:changeImg(panel))
+button = tk.Button(root, text="ボタン", command=lambda:mainProcess(panel))
 #表示
 button.grid()
 

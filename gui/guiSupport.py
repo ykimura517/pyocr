@@ -15,7 +15,7 @@ from ssd import build_ssd
 from matplotlib import pyplot as plt
 from data import VOCDetection, VOC_ROOT, VOCAnnotationTransform
 from data import VOC_CLASSES as labels
-
+import pandas as pd
 # target_img=sys.argv[1]
 
 class guiSuppoter():
@@ -81,7 +81,35 @@ class guiSuppoter():
                 currentAxis.add_patch(plt.Rectangle(*coords, fill=False, edgecolor=color, linewidth=2))
                 currentAxis.text(pt[0], pt[1], display_txt, bbox={'facecolor':color, 'alpha':0.5})
                 j+=1
-        plt.show()
+        # plt.show()
         # plt.close()
 
         plt.savefig("result.png")
+        return 4830,5421 #karinosuuuji
+
+class DBManager():
+    """docstring for ."""
+    def __init__(self,mydb="db.csv"):
+
+        self.df = pd.read_csv(mydb)
+    def isInDb(self,targetNumPart1,targetNumPart2):
+
+        #データベースを一件ずつ照合確認。遅そう
+        for i in range(len(self.df)):
+
+            if targetNumPart1 == self.df["part1"][i] and targetNumPart2 == self.df["part2"][i]:
+
+                return True
+
+        return False
+
+    def disp(self):
+        print(self.df["part1"])
+        print(self.df["part1"][0])
+        print(type(self.df["part1"][0]))
+        print(type(self.df["part1"]))
+
+
+if __name__=="__main__":
+    p=DBManager()
+    p.disp()

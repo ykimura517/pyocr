@@ -17,7 +17,14 @@ LABEL maintainer="Admin yusukekimura1219@gmail.com"
 
 RUN apt update && apt install python3-pip -y  && pip3 install pytesseract && pip3 install pillow && apt install tesseract-ocr -y && pip3 install torch==1.4.0+cpu torchvision==0.5.0+cpu -f https://download.pytorch.org/whl/torch_stable.html && pip3 install opencv-python && apt install libsm6 -y && pip3 install matplotlib
 ```
+注）gui使用時にtkinterがないと怒られたら  
+```
+apt-get install python3-tk
+```
+しておく
 
+注）gui使用時にディスプレイ関係で怒られたら[ここ](https://qiita.com/mocobt/items/726024fa1abf54d843e1)  
+を参照
 ### このリポジトリをクローン
 ```
 git clone このリポジトリ
@@ -32,7 +39,7 @@ docker build .
 
 docker tag イメージのID num-plate-ocr
 # イメージのIDは docker images で確認
-
+```
 docker run -it -v $PWD"/pyocr":/pyocr  --name workspace-ocr num-plate-ocr
 ```
 ちなみに2回目以降は
