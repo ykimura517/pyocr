@@ -4,6 +4,7 @@ import tkinter as tk
 from sasikae import sasikae
 from PIL import ImageTk
 from guiSupport import guiSuppoter,DBManager
+from tkinter import filedialog
 
 detecter = guiSuppoter()
 DBManager=DBManager()
@@ -19,15 +20,37 @@ def changeImg(panel):
     panel.configure(image=img)
     panel.image=img
 
-def mainProcess(panel,target_img="po.png"):
-    num1,num2=detecter.imgDetect(target_img)
+def getFilename(event=None):
+    filename = filedialog.askopenfilename()
+    print('Selected:', filename)
+    return filename
+
+def mainProcess(panel):
+    targetImage=getFilename()
+    # num1,num2=detecter.imgDetect(target_img)
+    num1,num2=detecter.imgDetect(targetImage)
     changeImg(panel)
+
+    label3 = tk.Label(root, text="読み取ったナンバー")
+    label3.grid(row=12, column=0, columnspan=1, padx=1, pady=1)
+
     if DBManager.isInDb(num1,num2):
         print("OK")
+        label2 = tk.Label(root, text="登録確認車両です")
+        label2.grid(row=10, column=0, columnspan=1, padx=1, pady=1)
+        label4 = tk.Label(root, text=str(num1))
+        label4.grid(row=14, column=0, columnspan=1, padx=1, pady=1)
+        label5 = tk.Label(root, text=str(num2))
+        label5.grid(row=15, column=0, columnspan=1, padx=1, pady=1)
     else:
         print("NG")
-
+        label2 = tk.Label(root, text="登録されていない車両の可能性があります")
+        label2.grid(row=10, column=0, columnspan=1, padx=1, pady=1)
+    #表示する
     return num1,num2
+
+
+
 
 
 #
@@ -43,9 +66,9 @@ root.title("ナンバープレート検知デモ")
 root.geometry("800x800")
 
 #Label部品を作る
-label = tk.Label(root, text="Tkinterのテストです")
+label = tk.Label(root, text="ナンバープレート検知デモ")
 #表示する
-label.grid()
+label.grid(row=0, column=0, columnspan=1, padx=1, pady=1)
 
 
 
@@ -54,14 +77,20 @@ panel = tk.Label(root,image=img,width = 280, height = 260)
 
 panel.img=img
 # panel.pack(side="top",fill="both",expand="yes")
-panel.grid()
+panel.grid(row=1, column=3, columnspan=2, padx=15, pady=5)
 
 #ボタンを作る
 # button = tk.Button(root, text="ボタン", command= lambda : pushed(button))
 # button = tk.Button(root, text="ボタン", command=lambda:changeImg(panel))
-button = tk.Button(root, text="ボタン", command=lambda:mainProcess(panel))
+# resultLabel = tk.Label(root, text="")
+
+button = tk.Button(root, text="画像を選択", command=lambda:mainProcess(panel))
 #表示
-button.grid()
+button.grid(row=1, column=0, columnspan=2, padx=5, pady=5)
+
+
+# button4choosefile = tk.Button(root, text='画像を選択', command=UploadAction)
+# button4choosefile.grid()
 
 #displaying image
 # img = tk.PhotoImage(file="son.png")
